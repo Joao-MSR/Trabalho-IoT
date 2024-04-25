@@ -1,0 +1,48 @@
+import time
+import random
+
+class SistemaPesoPontes:
+    def __init__(self, limite_peso, distancia_alerta):
+        self.limite_peso = limite_peso
+        self.distancia_alerta = distancia_alerta
+
+    def verificar_peso(self, peso_veiculo, distancia_ponte, distancia_radar, antecedencia_alerta, peso_sensor):
+        if distancia_ponte <= self.distancia_alerta:
+            if peso_sensor <= self.limite_peso:
+                return f"É seguro passar pela ponte. Limite de peso: {self.limite_peso} toneladas."
+            else:
+                return f"Atenção: Limite de peso da ponte excedido! Limite de peso: {self.limite_peso} toneladas."
+        elif distancia_radar <= antecedencia_alerta:
+            if distancia_ponte < distancia_radar:
+                direcao = "direita"
+            else:
+                direcao = "esquerda"
+            if peso_veiculo <= self.limite_peso:
+                if peso_veiculo < 10:
+                    return f"Limite seguro"
+                else:
+                    return f"Atenção: Radar de peso, Limite de peso: {self.limite_peso} toneladas. Peso do veículo: {peso_veiculo} toneladas. Peso excedendo o limite."
+            else:
+                return f"Atenção: Radar de peso, Limite de peso: {self.limite_peso} toneladas. Peso do veículo: {peso_veiculo} toneladas. Peso excedendo o limite."
+        else:
+            return "Limite seguro."
+
+# Configurações do sistema
+limite_peso_ponte = 10  # Limite de peso suportado pela ponte em toneladas
+distancia_alerta_ponte = 500  # Distância de alerta em metros
+antecedencia_alerta_radar = 100  # Distância de antecedência para o alerta do radar em metros
+
+# Criando o sistema de peso para a ponte
+sistema_peso_ponte = SistemaPesoPontes(limite_peso_ponte, distancia_alerta_ponte)
+
+# Simulação de passagem de veículos
+while True:
+    peso_veiculo = random.uniform(7, 15)  # Peso do veículo em toneladas
+    distancia_ponte = random.randint(400, 800)  # Distância do veículo para a ponte em metros
+    distancia_radar = random.randint(80, 150)  # Distância do veículo para o radar de peso em metros
+    peso_sensor = random.uniform(8, 12)  # Peso medido pelo sensor antes da ponte em toneladas
+
+    mensagem_alerta = sistema_peso_ponte.verificar_peso(peso_veiculo, distancia_ponte, distancia_radar, antecedencia_alerta_radar, peso_sensor)
+    print(mensagem_alerta)
+    print()
+    time.sleep(5)  # Espera 5 segundo antes de simular a próxima passagem de veículo
